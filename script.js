@@ -95,8 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const soundIconOff = document.getElementById('sound-icon-off');
 
     const yesBtn = document.getElementById('yes-btn');
-    const thinkBtn = document.getElementById('think-btn');
-    const thinkBtnText = document.getElementById('think-btn-text');
 
     const successModal = document.getElementById('success-modal');
     const copyBtn = document.getElementById('copy-btn');
@@ -379,33 +377,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --------------------------------------------------------------------------
-    // Финальные действия: Кнопки "Да" и "Надо подумать"
+    // Финальное действие: Кнопка согласия
     // --------------------------------------------------------------------------
-    const playfulPleaList = [
-        'А если с вкусняшкой? 🍫',
-        'А если с ароматным кофе и круассаном? ☕🥐',
-        'А если с миллионом комплиментов? 🌸',
-        'Ну посмотри, какой он милый! 🥺💚',
-        'Уговорил, согласна! 🥰'
-    ];
-
-    thinkBtn.addEventListener('click', () => {
-        playPopSound();
-        if (thinkTries < playfulPleaList.length - 1) {
-            thinkBtnText.textContent = playfulPleaList[thinkTries];
-            thinkTries++;
-            // Cute wiggle
-            thinkBtn.style.transform = 'scale(0.95)';
-            setTimeout(() => { thinkBtn.style.transform = 'scale(1)'; }, 150);
-        } else {
-            // Last plea triggers agreement
-            thinkBtnText.textContent = playfulPleaList[playfulPleaList.length - 1];
-            setTimeout(() => {
-                handleYesClick();
-            }, 300);
-        }
-    });
-
     yesBtn.addEventListener('click', () => {
         handleYesClick();
     });

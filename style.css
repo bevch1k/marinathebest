@@ -185,6 +185,10 @@ body {
     padding: 0 4px;
 }
 
+.app-header.header-single-action {
+    justify-content: flex-end;
+}
+
 .badge-tag {
     display: inline-flex;
     align-items: center;
@@ -791,6 +795,14 @@ body {
     padding: 16px 20px;
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-emerald);
+}
+
+.btn-emerald.btn-full {
+    width: 100%;
+    flex: none;
+    padding: 18px 24px;
+    font-size: 1.15rem;
+    border-radius: var(--radius-lg);
 }
 
 .btn-emerald:hover {
