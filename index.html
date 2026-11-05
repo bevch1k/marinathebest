@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#fdf2f8">
+    <meta name="description" content="Особенный опросник для Марины">
+    <title>Для самой классной Марины ✨</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Ambient Glow & Floating Elements -->
+    <div class="ambient-background">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+        <div class="floating-sparkles" id="sparkles-container"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="app-container">
+        <!-- Header Controls -->
+        <header class="app-header">
+            <div class="badge-tag">
+                <span class="badge-dot"></span>
+                <span>Маленький тест</span>
+            </div>
+            
+            <button class="sound-toggle" id="sound-btn" title="Включить / выключить звук" aria-label="Переключить звук">
+                <svg id="sound-icon-on" class="sound-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                </svg>
+                <svg id="sound-icon-off" class="sound-icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <line x1="23" y1="9" x2="17" y2="15"></line>
+                    <line x1="17" y1="9" x2="23" y2="15"></line>
+                </svg>
+            </button>
+        </header>
+
+        <!-- Quiz Card -->
+        <div class="quiz-card" id="quiz-card">
+            
+            <!-- Progress Section -->
+            <div class="progress-section" id="progress-wrapper">
+                <div class="progress-meta">
+                    <span class="progress-label" id="step-indicator">Вопрос 1 из 5</span>
+                    <span class="progress-percent" id="percent-indicator">20%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-fill" style="width: 20%;">
+                        <!-- Jumping Bunny Tracker -->
+                        <div class="track-bunny" id="track-bunny">🐰</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Intro Screen (First greeting before question 1, smooth entrance) -->
+            <div class="screen-view active" id="intro-screen">
+                <div class="mascot-badge bounce-anim">
+                    <span class="mascot-emoji">🌸</span>
+                </div>
+                <h1 class="main-title">Привет, Марина!</h1>
+                <p class="subtitle">У меня есть для тебя 5 коротеньких и очень важных вопросов. Пройдёшь?</p>
+                
+                <div class="intro-perks">
+                    <div class="perk-item">
+                        <span class="perk-icon">⏱️</span>
+                        <span>Ровно 30 секунд</span>
+                    </div>
+                    <div class="perk-item">
+                        <span class="perk-icon">💜</span>
+                        <span>100% искренность</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary start-btn" id="start-quiz-btn">
+                    <span>Начать опрос</span>
+                    <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Question Screen -->
+            <div class="screen-view" id="question-screen">
+                <div class="question-header">
+                    <span class="question-emoji" id="q-emoji">💌</span>
+                    <h2 class="question-text" id="q-text">Текст вопроса</h2>
+                </div>
+
+                <div class="options-grid" id="options-container">
+                    <!-- Options injected via JavaScript -->
+                </div>
+
+                <div class="feedback-banner" id="feedback-banner">
+                    <span class="feedback-emoji">✨</span>
+                    <span class="feedback-text" id="feedback-text">Отличный ответ!</span>
+                </div>
+
+                <div class="card-footer">
+                    <button class="btn btn-ghost" id="back-btn">
+                        <svg class="back-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12"></line>
+                            <polyline points="12 19 5 12 12 5"></polyline>
+                        </svg>
+                        <span>Назад</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Final Screen -->
+            <div class="screen-view" id="final-screen">
+                <!-- Cute Green NFT Bunny Artwork -->
+                <div class="nft-bunny-wrapper" id="bunny-wrapper">
+                    <div class="bunny-glow"></div>
+                    <div class="nft-tag">NFT Bunny #001 💚</div>
+                    <svg class="nft-bunny-svg" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Sparkles behind bunny -->
+                        <path class="bunny-sparkle sp-1" d="M30 40L35 50L45 55L35 60L30 70L25 60L15 55L25 50Z" fill="#34D399" />
+                        <path class="bunny-sparkle sp-2" d="M205 35L210 45L220 50L210 55L205 65L200 55L190 50L200 45Z" fill="#A7F3D0" />
+                        <path class="bunny-sparkle sp-3" d="M215 140L218 147L225 150L218 153L215 160L212 153L205 150Z" fill="#6EE7B7" />
+
+                        <!-- Left Ear -->
+                        <g class="bunny-ear-left">
+                            <ellipse cx="85" cy="55" rx="20" ry="48" transform="rotate(-12 85 55)" fill="#34D399" />
+                            <ellipse cx="85" cy="58" rx="11" ry="36" transform="rotate(-12 85 58)" fill="#F472B6" opacity="0.8" />
+                        </g>
+
+                        <!-- Right Ear -->
+                        <g class="bunny-ear-right">
+                            <ellipse cx="155" cy="55" rx="20" ry="48" transform="rotate(12 155 55)" fill="#34D399" />
+                            <ellipse cx="155" cy="58" rx="11" ry="36" transform="rotate(12 155 58)" fill="#F472B6" opacity="0.8" />
+                        </g>
+
+                        <!-- Body -->
+                        <ellipse cx="120" cy="180" rx="55" ry="42" fill="#10B981" />
+                        <!-- White tummy -->
+                        <ellipse cx="120" cy="184" rx="34" ry="26" fill="#ECFDF5" />
+
+                        <!-- Head -->
+                        <ellipse cx="120" cy="120" rx="64" ry="54" fill="#34D399" />
+
+                        <!-- Cheeks (Blush) -->
+                        <ellipse cx="80" cy="134" rx="12" ry="7" fill="#F472B6" opacity="0.65" />
+                        <ellipse cx="160" cy="134" rx="12" ry="7" fill="#F472B6" opacity="0.65" />
+
+                        <!-- Big Shiny Kawaii Eyes -->
+                        <!-- Left Eye -->
+                        <g class="bunny-eye" id="eye-l">
+                            <ellipse cx="94" cy="114" rx="10" ry="12" fill="#1F2937" />
+                            <circle cx="91" cy="110" r="4.5" fill="#FFFFFF" />
+                            <circle cx="97" cy="118" r="2" fill="#FFFFFF" />
+                        </g>
+                        <!-- Right Eye -->
+                        <g class="bunny-eye" id="eye-r">
+                            <ellipse cx="146" cy="114" rx="10" ry="12" fill="#1F2937" />
+                            <circle cx="143" cy="110" r="4.5" fill="#FFFFFF" />
+                            <circle cx="149" cy="118" r="2" fill="#FFFFFF" />
+                        </g>
+
+                        <!-- Cute Bunny Nose -->
+                        <polygon points="120,126 114,120 126,120" fill="#EC4899" />
+
+                        <!-- Cute Mouth -->
+                        <path d="M112 129C115 133 118 133 120 129C122 133 125 133 128 129" stroke="#065F46" stroke-width="2.5" stroke-linecap="round" />
+
+                        <!-- Paws holding a glowing little heart -->
+                        <ellipse cx="95" cy="172" rx="14" ry="11" transform="rotate(-15 95 172)" fill="#34D399" />
+                        <ellipse cx="145" cy="172" rx="14" ry="11" transform="rotate(15 145 172)" fill="#34D399" />
+                        
+                        <!-- Little heart between paws -->
+                        <path class="heart-pulse" d="M120 178C120 178 108 170 108 163C108 158.5 111.5 156 115 156C117.5 156 119.5 157.5 120 159C120.5 157.5 122.5 156 125 156C128.5 156 132 158.5 132 163C132 170 120 178 120 178Z" fill="#EC4899" />
+                    </svg>
+                </div>
+
+                <div class="final-content">
+                    <h2 class="final-heading">Поздравляем! 🎉</h2>
+                    <p class="final-highlight">Ты добралась до главного вопроса.</p>
+                    
+                    <div class="final-quote-card">
+                        <p class="quote-line">Есть один человек, который очень хочет <strong>зелёного зайчика</strong></p>
+                        <p class="quote-line sub">И этот человек — <span>автор сайта</span>. 😊</p>
+                        <p class="quote-question">Как думаешь, может, ты захочешь исполнить его маленькую мечту?</p>
+                    </div>
+
+                    <!-- Final Action Buttons -->
+                    <div class="final-actions">
+                        <button class="btn btn-emerald" id="yes-btn">
+                            <span class="btn-icon">🐰</span>
+                            <span>Конечно, сделаем! 💚</span>
+                        </button>
+                        
+                        <button class="btn btn-playful" id="think-btn">
+                            <span id="think-btn-text">Надо подумать... 🤔</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Success Modal After Clicking Yes -->
+            <div class="modal-overlay" id="success-modal">
+                <div class="modal-card">
+                    <div class="modal-emoji">🥳✨</div>
+                    <h3 class="modal-title">Марина, ты просто чудо!</h3>
+                    <p class="modal-desc">
+                        Зелёный зайчик уже прыгает от счастья, а автор сайта улыбается до ушей! 💚🐰
+                    </p>
+                    <div class="modal-box">
+                        <p class="modal-message" id="copy-text">«Марина согласна! Зелёный зайчик будет у тебя 🐰💚»</p>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button class="btn btn-primary" id="copy-btn">
+                            <span id="copy-btn-text">Скопировать для автора 📋</span>
+                        </button>
+                        <button class="btn btn-ghost" id="close-modal-btn">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Сделано с теплом и розово-фиолетовой любовью специально для Марины 💜</p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
